@@ -2,17 +2,19 @@
 
 데이터 조작 및 분석을 위해 Python 프로그래밍 언어로 작성된 소프트웨어 라이브러리이다.
 
+# **INDEX**
+
 **1. [Series](#Series)**
 
  - [dictionary to Series](#dictionary-to-Series)
 
- - [Indexing](#Indexing)
+ - [Indexing](#Indexing(Series))
 
 **2. [DataFrame](#DataFrame)**
 
  - [dictionary to DataFrame](#dictionary-to-DataFrame)
 
- - [Indexing](#Indexing)
+ - [Indexing](#Indexing(DataFrame))
 
 **3. [데이터 입·출력](#데이터-입·출력)**
 
@@ -107,7 +109,7 @@ dtype: int64
 ```
 
 
-## **Indexing**
+## **Indexing(Series)**
 
 인덱싱을 통해 Series 데이터를 조회할 수 있다.
 
@@ -227,7 +229,7 @@ print(df2)
 ```
 
 
-## **Indexing**
+## **Indexing(DataFrame)**
 
 인덱스를 통해서 데이터를 출력할 수 있다.
 
