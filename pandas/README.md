@@ -30,6 +30,15 @@
 
 **4. [행과 열 다루기](#행과-열-다루기)**
 
+ - [행 다루기](#행-다루기)
+
+ - [열 다루기](#열-다루기)
+
+**5. [문자열 다루기](#문자열-다루기)**
+
+**6. [데이터 마다 함수 적용하기](#데이터-마다-함수-적용하기)**
+
+**7. [기타 함수](#기타-함수)**
 
 ***
 
@@ -364,9 +373,20 @@ pandas.read_sql('SELECT * FROM {}'.format(table_names[0]), con=engine) # 테이�
 
 # **행과 열 다루기**
 
+## **행 다루기**
+
 DataFrame의 append를 이용하여 Series를 추가할 수 있다.
 
 ```py
+import pandas
+
+data = [
+    ['사람1', 20, '서울'],
+    ['사람2', 32, '대전'],
+    ['사람3', 20, '인천'],
+    ['사람4', 26, '서울']
+    ]
+
 df1 = pandas.DataFrame(data)
 df2 = df1.append({'이름':'사람5', '나이':28, '지역':'부산'}, ignore_index=True)
 print(df2)
@@ -383,9 +403,9 @@ print(df2)
 DataFrame의 loc을 이용하여 Series를 대체하거나 추가할 수 있다.
 
 ```py
-df1 = pandas.DataFrame(data) # df1.shape[0] = 4
-df1.loc[df1.shape[0]] = ['사람5', 28, '부산']
-print(df1)
+df = pandas.DataFrame(data) # df.shape[0] = 4
+df.loc[df.shape[0]] = ['사람5', 28, '부산']
+print(df)
 
 출력 결과
     이름  나이  지역
@@ -396,42 +416,366 @@ print(df1)
 4  사람5  28  부산
 ```
 
-DataFrame의 여러가지 Attribute로 데이터를 분석할 수 있다.
+DataFrame의 drop을 이용하여 행을 삭제할 수 있다.
 
 ```py
 df = pandas.DataFrame(data)
-print(df.index)
-print(df.columns)
-print(df.values)
-print(df.dtypes)
-print(df.info())
+df.drop(1, inplace=True) # 1번 인덱스 행 삭제
+```
 
+여러 행을 삭제해보자.
+
+```py
+df.drop([0,3], inplace=True) # 0, 3번 인덱스 행 삭제
+```
+
+데이터의 null이 포함된 행을 삭제할 수 있다.
+
+```py
+import pandas
+import numpy
+
+data = [
+    ['사람1', 20, '서울'],
+    ['사람2', 32, None],
+    [numpy.nan, 20, '인천'],
+    ['사람4', 26, '서울']
+    ]
+    
+df = pandas.DataFrame(data)
+df.dropna(axis=0, inplace=True)
+print(df)
 
 출력 결과
-1. df.index
-RangeIndex(start=0, stop=4, step=1)
-2. df.columns
-Index(['이름', '나이', '지역'], dtype='object')
-3. df.values
-[['사람1' 20 '서울']
- ['사람2' 32 '대전']
- ['사람3' 20 '인천']
- ['사람4' 26 '서울']]
-4. df.dtypes
-이름    object
-나이     int64
-지역    object
-dtype: object
-5. df.info()
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 4 entries, 0 to 3
-Data columns (total 3 columns):
- #   Column  Non-Null Count  Dtype
----  ------  --------------  -----
- 0   이름      4 non-null      object
- 1   나이      4 non-null      int64
- 2   지역      4 non-null      object
-dtypes: int64(1), object(2)
-memory usage: 224.0+ bytes
-None
+     0   1   2
+0  사람1  20  서울
+3  사람4  26  서울
+```
+
+dropna의 how인자를 설정하여 모든 행에 null값이여야 삭제할 수 있을 수 있도록 할 수 있다.
+
+다음의 예제는 3번 인덱스 행은 모든 값이 null이 아니므로 삭제되지 않는다.
+
+```py
+import pandas
+import numpy
+
+data = [
+    ['사람1', 20, '서울'],
+    ['사람2', 32, '대전'],
+    [numpy.nan, None, numpy.nan],
+    [None, 26, '서울']
+    ]
+    
+df = pandas.DataFrame(data)
+df.dropna(axis=0, how='all', inplace=True)
+print(df)
+
+출력 결과
+      0     1   2
+0   사람1  20.0  서울
+1   사람2  32.0  대전
+3  None  26.0  서울
+```
+
+
+## **열 다루기**
+
+다음과 같이 열을 추가하자.
+
+```py
+import pandas
+
+data = {
+    '이름':['사람1', '사람2', '사람3', '사람4'],
+    '나이':[20, 32, 20, 26],
+    '지역':['서울', '대전', '인천', '서울']
+    }
+
+df          = pandas.DataFrame(data)
+df['키']    = pandas.Series([160.0, 176.5, 172.3, 170.8, 181.3])
+print(df)
+
+출력 결과
+    이름  나이  지역      키
+0  사람1  20  서울  160.0
+1  사람2  32  대전  176.5
+2  사람3  20  인천  172.3
+3  사람4  26  서울  170.8
+```
+
+DataFrame의 drop을 이용하여 열을 삭제할 수 있다.
+
+```py
+df          = pandas.DataFrame(data)
+df.drop('이름', axis=1, inplace=True) # 이름 열 삭제
+```
+
+여러 열을 삭제해보자.
+
+```py
+df.drop(['이름', '지역'], axis=1, inplace=True) # 이름, 지역 열 삭제
+```
+
+데이터의 null이 포함된 열을 삭제할 수 있다.
+
+```py
+import pandas
+import numpy
+
+data = {
+    '이름':['사람1', '사람2', '사람3', '사람4'],
+    '나이':[numpy.nan, 32, 20, 26],
+    '지역':['서울', None, '인천', '서울']
+    }
+
+df          = pandas.DataFrame(data)
+df.dropna(axis=1, inplace=True)
+print(df)
+
+출력 결과
+    이름
+0  사람1
+1  사람2
+2  사람3
+3  사람4
+```
+
+dropna의 how인자를 설정하여 모든 열에 null값이여야 삭제할 수 있을 수 있도록 할 수 있다.
+
+다음의 예제는 지역 열은 모든 값이 null이 아니므로 삭제되지 않는다.
+
+```py
+import pandas
+import numpy
+
+data = {
+    '이름':['사람1', '사람2', '사람3', '사람4'],
+    '나이':[numpy.nan, numpy.nan, numpy.nan, numpy.nan],
+    '지역':['서울', None, '인천', '서울']
+    }
+
+df          = pandas.DataFrame(data)
+df.dropna(axis=1, how='all', inplace=True)
+print(df)
+
+출력 결과
+    이름    지역
+0  사람1    서울
+1  사람2  None
+2  사람3    인천
+3  사람4    서울
+```
+
+
+# **문자열 다루기**
+
+replace를 활용하여 문자열을 치환하자.
+
+```py
+import pandas
+
+data = {
+    '이름':['사람1', '사람2', '사람3', '사람4'],
+    '나이':[20, 32, 20, 26],
+    '지역':['서울', '대전', '인천', '서울']
+    }
+
+df = pandas.DataFrame(data)
+df['이름'] = df['이름'].str.replace('사람', '아무개')
+print(df)
+
+출력 결과
+     이름  나이  지역
+0  아무개1  20  서울
+1  아무개2  32  대전
+2  아무개3  20  인천
+3  아무개4  26  서울
+```
+
+len을 활용하여 문자열의 길이를 구할 수 있다.
+
+```py
+df = pandas.DataFrame(data)
+print(df['이름'].str.len())
+
+출력 결과
+0    3
+1    3
+2    3
+3    3
+Name: 이름, dtype: int64
+```
+
+contains를 활용하여 문자열이 포함되어 있는지 확인할 수 있다.
+
+```py
+df = pandas.DataFrame(data)
+print(df['지역'].str.contains('서울'))
+
+출력 결과
+0     True
+1    False
+2    False
+3     True
+Name: 지역, dtype: bool
+```
+
+
+# **데이터 마다 함수 적용하기**
+
+apply와 lambda를 활용하여 데이터마다 사용자 정의 함수를 적용시킬 수 있다.
+
+```py
+import pandas
+
+data = {
+    'height':[5, 4, 8, 7, 2, 5],
+    'color':['red', 'red', 'red', 'red', 'green', 'green']
+    }
+df              = pandas.DataFrame(data)
+df['height']    = df.loc[:, 'height'].apply(lambda x: x + 1 if x < 5 else x) # height가 5 미만이면 +1 한다.
+df['color']     = df.loc[:, 'color'].apply(lambda x: x.upper()) # color 데이터를 모두 대문자화 한다.
+print(df)
+
+출력 결과
+   height  color
+0       5    RED
+1       5    RED
+2       8    RED
+3       7    RED
+4       3  GREEN
+5       5  GREEN
+```
+
+
+# **기타 함수**
+
+DataFrame의 여러가지 Attribute로 데이터를 분석할 수 있다.
+
+```py
+import pandas
+
+data = {
+    '이름':['사람1', '사람2', '사람3', '사람4'],
+    '나이':[20, 32, 20, 26],
+    '지역':['서울', '대전', '인천', '서울']
+    }
+df = pandas.DataFrame(data)
+
+print(df.index)
+# RangeIndex(start=0, stop=4, step=1)
+
+print(df.columns)
+# Index(['이름', '나이', '지역'], dtype='object')
+
+print(df.values)
+# [['사람1' 20 '서울']
+#  ['사람2' 32 '대전']
+#  ['사람3' 20 '인천']
+#  ['사람4' 26 '서울']]
+
+print(df.dtypes)
+# 이름    object
+# 나이     int64
+# 지역    object
+# dtype: object
+
+print(df.info())
+# <class 'pandas.core.frame.DataFrame'>
+# RangeIndex: 4 entries, 0 to 3
+# Data columns (total 3 columns):
+#  #   Column  Non-Null Count  Dtype
+# ---  ------  --------------  -----
+#  0   이름      4 non-null      object
+#  1   나이      4 non-null      int64
+#  2   지역      4 non-null      object
+# dtypes: int64(1), object(2)
+# memory usage: 224.0+ bytes
+# None
+
+print(df.sort_values('지역'))
+#     이름  나이  지역
+# 1  사람2  32  대전
+# 0  사람1  20  서울
+# 3  사람4  26  서울
+# 2  사람3  20  인천
+
+print(df.sort_values('나이', ascending=False))
+#     이름  나이  지역
+# 1  사람2  32  대전
+# 3  사람4  26  서울
+# 0  사람1  20  서울
+# 2  사람3  20  인천
+
+print(df.sum())
+# 이름    사람1사람2사람3사람4
+# 나이              98
+# 지역        서울대전인천서울
+# dtype: object
+
+print(df.min())
+# 이름    사람1
+# 나이     20
+# 지역     대전
+# dtype: object
+
+print(df.max())
+# 이름    사람4
+# 나이     32
+# 지역     인천
+# dtype: object
+
+print(df.median())
+# 나이    23.0
+# dtype: float64
+
+print(df.mean())
+# 나이    24.5
+# dtype: float64
+
+print(df.count())
+# 이름    4
+# 나이    4
+# 지역    4
+# dtype: int64
+
+print(df.isnull())
+#       이름     나이     지역
+# 0  False  False  False
+# 1  False  False  False
+# 2  False  False  False
+# 3  False  False  False
+
+print(df.shape)
+# (4, 3)
+
+print(df['지역'].unique())
+# ['서울' '대전' '인천']
+
+print(df['나이'].value_counts(normalize=True))
+# 20    0.50
+# 26    0.25
+# 32    0.25
+# Name: 나이, dtype: float64
+
+df.drop_duplicates('나이', inplace=True)
+#     이름  나이  지역
+# 0  사람1  20  서울
+# 1  사람2  32  대전
+# 3  사람4  26  서울
+
+print(df.groupby('지역')['나이'].mean())
+# 지역
+# 대전    32
+# 서울    23
+# 인천    20
+# Name: 나이, dtype: int64
+
+print(df.groupby('지역')['나이'].aggregate(numpy.mean))
+# 지역
+# 대전    32
+# 서울    23
+# 인천    20
+# Name: 나이, dtype: int64
 ```
