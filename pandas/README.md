@@ -14,7 +14,7 @@
 
  - [dictionary to DataFrame](#dictionary-to-DataFrame)
 
- - [Indexing](#Indexing-(DataFrame))
+ - [Indexing](#Indexing-DataFrame)
 
 **3. [데이터 입·출력](#데이터-입·출력)**
 
@@ -27,6 +27,8 @@
  - [excel](#excel)
 
  - [mysql](#mysql)
+
+**4. [행·열 추가·삭제](#행·열-추가·삭제)**
 
 
 ***
@@ -229,7 +231,7 @@ print(df2)
 ```
 
 
-## **Indexing(DataFrame)**
+## **Indexing DataFrame**
 
 인덱스를 통해서 데이터를 출력할 수 있다.
 
@@ -261,79 +263,6 @@ print(df.iloc[:, [0, 2]])   # 이름과 지역 열 출력
 df = pandas.DataFrame(data)
 df_filter = df.loc[:, '나이'] > 25          # 필터링 할 조건
 print(df.loc[df_filter, ['이름', '지역']])  # 나이가 25 초과인 이름, 지역 열 출력
-```
-
-
-DataFrame의 append를 이용하여 Series를 추가할 수 있다.
-
-```py
-df1 = pandas.DataFrame(data)
-df2 = df1.append({'이름':'사람5', '나이':28, '지역':'부산'}, ignore_index=True)
-print(df2)
-
-출력 결과
-    이름  나이  지역
-0  사람1  20  서울
-1  사람2  32  대전
-2  사람3  20  인천
-3  사람4  26  서울
-4  사람5  28  부산
-```
-
-DataFrame의 loc을 이용하여 Series를 대체하거나 추가할 수 있다.
-
-```py
-df1 = pandas.DataFrame(data) # df1.shape[0] = 4
-df1.loc[df1.shape[0]] = ['사람5', 28, '부산']
-print(df1)
-
-출력 결과
-    이름  나이  지역
-0  사람1  20  서울
-1  사람2  32  대전
-2  사람3  20  인천
-3  사람4  26  서울
-4  사람5  28  부산
-```
-
-DataFrame의 여러가지 Attribute로 데이터를 분석할 수 있다.
-
-```py
-df = pandas.DataFrame(data)
-print(df.index)
-print(df.columns)
-print(df.values)
-print(df.dtypes)
-print(df.info())
-
-
-출력 결과
-1. df.index
-RangeIndex(start=0, stop=4, step=1)
-2. df.columns
-Index(['이름', '나이', '지역'], dtype='object')
-3. df.values
-[['사람1' 20 '서울']
- ['사람2' 32 '대전']
- ['사람3' 20 '인천']
- ['사람4' 26 '서울']]
-4. df.dtypes
-이름    object
-나이     int64
-지역    object
-dtype: object
-5. df.info()
-<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 4 entries, 0 to 3
-Data columns (total 3 columns):
- #   Column  Non-Null Count  Dtype
----  ------  --------------  -----
- 0   이름      4 non-null      object
- 1   나이      4 non-null      int64
- 2   지역      4 non-null      object
-dtypes: int64(1), object(2)
-memory usage: 224.0+ bytes
-None
 ```
 
 
@@ -432,4 +361,77 @@ column_names= [column if inspector else None for column in inspector.get_columns
 df.to_sql(name=table_names[0], con=engine, if_exists='append', index=False) # 테이블에 데이터 추가
 pandas.read_sql('SELECT * FROM {}'.format(table_names[0]), con=engine) # 테이블의 데이터 읽기
 ```
-[aa](aa)
+
+## **행·열 추가·삭제**
+
+DataFrame의 append를 이용하여 Series를 추가할 수 있다.
+
+```py
+df1 = pandas.DataFrame(data)
+df2 = df1.append({'이름':'사람5', '나이':28, '지역':'부산'}, ignore_index=True)
+print(df2)
+
+출력 결과
+    이름  나이  지역
+0  사람1  20  서울
+1  사람2  32  대전
+2  사람3  20  인천
+3  사람4  26  서울
+4  사람5  28  부산
+```
+
+DataFrame의 loc을 이용하여 Series를 대체하거나 추가할 수 있다.
+
+```py
+df1 = pandas.DataFrame(data) # df1.shape[0] = 4
+df1.loc[df1.shape[0]] = ['사람5', 28, '부산']
+print(df1)
+
+출력 결과
+    이름  나이  지역
+0  사람1  20  서울
+1  사람2  32  대전
+2  사람3  20  인천
+3  사람4  26  서울
+4  사람5  28  부산
+```
+
+DataFrame의 여러가지 Attribute로 데이터를 분석할 수 있다.
+
+```py
+df = pandas.DataFrame(data)
+print(df.index)
+print(df.columns)
+print(df.values)
+print(df.dtypes)
+print(df.info())
+
+
+출력 결과
+1. df.index
+RangeIndex(start=0, stop=4, step=1)
+2. df.columns
+Index(['이름', '나이', '지역'], dtype='object')
+3. df.values
+[['사람1' 20 '서울']
+ ['사람2' 32 '대전']
+ ['사람3' 20 '인천']
+ ['사람4' 26 '서울']]
+4. df.dtypes
+이름    object
+나이     int64
+지역    object
+dtype: object
+5. df.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 4 entries, 0 to 3
+Data columns (total 3 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   이름      4 non-null      object
+ 1   나이      4 non-null      int64
+ 2   지역      4 non-null      object
+dtypes: int64(1), object(2)
+memory usage: 224.0+ bytes
+None
+```
