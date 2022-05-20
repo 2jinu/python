@@ -28,7 +28,7 @@
 
  - [mysql](#mysql)
 
-**4. [행·열 추가·삭제](#행·열-추가·삭제)**
+**4. [행·열 다루기](#행·열-다루기)**
 
 
 ***
@@ -362,7 +362,7 @@ df.to_sql(name=table_names[0], con=engine, if_exists='append', index=False) # �
 pandas.read_sql('SELECT * FROM {}'.format(table_names[0]), con=engine) # 테이블의 데이터 읽기
 ```
 
-## **행·열 추가·삭제**
+## **행·열 다루기**
 
 DataFrame의 append를 이용하여 Series를 추가할 수 있다.
 
