@@ -8,13 +8,13 @@
 
  - [dictionary to Series](#dictionary-to-Series)
 
- - [Indexing](#Indexing(Series))
+ - [Indexing](#Indexing-(Series))
 
 **2. [DataFrame](#DataFrame)**
 
  - [dictionary to DataFrame](#dictionary-to-DataFrame)
 
- - [Indexing](#Indexing(DataFrame))
+ - [Indexing](#Indexing-(DataFrame))
 
 **3. [데이터 입·출력](#데이터-입·출력)**
 
@@ -109,7 +109,7 @@ dtype: int64
 ```
 
 
-## **Indexing(Series)**
+## **Indexing (Series)**
 
 인덱싱을 통해 Series 데이터를 조회할 수 있다.
 
