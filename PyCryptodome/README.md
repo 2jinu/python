@@ -1,4 +1,4 @@
-# python
+# PyCryptodome
 
 암호화를 위한 Python 패키지
 

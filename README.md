@@ -1,11 +1,3 @@
 # python
 
-aa
-
-# **INDEX**
-
-**1. [a a](#a-a)**
-
- - [b b](#b-b)
-
-[cc](cc)
+다양한 python의 패키지/라이브러리 사용 법

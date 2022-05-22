@@ -1,4 +1,4 @@
-# python
+# 환경 확인
 
 python을 이용하여 현재 운영체제, python 버전 등을 확인
 

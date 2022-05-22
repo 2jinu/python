@@ -1,4 +1,4 @@
-# python
+# vix
 
 VMware의 VIX API를 위한 객체 지향 파이썬 wrapper
 

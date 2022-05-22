@@ -1,4 +1,4 @@
-# python
+# dictionary
 
 dictionary는 "키(Key)/값(Value)" 쌍을 요소로 갖는 자료형
 

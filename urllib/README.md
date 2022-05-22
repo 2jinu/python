@@ -1,4 +1,4 @@
-# python
+# urllib
 
 URL 작업을 위한 여러 모듈을 모은 패키지
 

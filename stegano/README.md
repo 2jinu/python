@@ -1,4 +1,4 @@
-# python
+# stegano
 
 Steganography 모듈
 

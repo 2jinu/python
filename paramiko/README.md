@@ -1,4 +1,4 @@
-# python
+# paramiko
 
 paramiko : SSH2 연결 (클라이언트 또는 서버)을 만들기위한 라이브러리
 scp : paramiko 전송을 사용하여 scp 프로토콜을 통해 파일을 보내고 받는 모듈
